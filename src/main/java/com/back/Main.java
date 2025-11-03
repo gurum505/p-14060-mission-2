@@ -16,7 +16,6 @@ public class Main {
             String content;
             final int no;
 
-
             public wise(String author, String content, int no) {
                 this.author = author;
                 this.content = content;
@@ -31,7 +30,21 @@ public class Main {
 
         while (true) {
             System.out.print("명령) ");
-            String cmd = sc.nextLine();
+            String input = sc.nextLine();
+
+            HashMap<String,String> queryMap = new HashMap<>();
+
+            String[] cmdQuery = input.split("\\?");
+            String cmd = cmdQuery[0];
+            if (cmdQuery.length >= 2){
+                String[] queries = cmdQuery[1].split("&");
+                for (String query : queries){
+                    String[] keyValue = query.split("=");
+                    if (keyValue.length == 2){
+                        queryMap.put(keyValue[0],keyValue[1]);
+                    }
+                }
+            }
 
             if (cmd.equals("등록")) {
                 System.out.print("명언 : ");
@@ -61,12 +74,8 @@ public class Main {
                     );
                 }
 
-            } else if (cmd.startsWith("삭제")) {
-                //fixme: check
-                //목록?keywordType=author&keyword=작자
-                String query = cmd.substring(3);
-                //Map<String,Integer> params = new HashMap<>();
-                int no = Integer.parseInt(query.substring(3));
+            } else if (cmd.startsWith("삭제") && cmdQuery.length >= 2) {
+                int no = Integer.parseInt(queryMap.get("id"));
 
                 if (no > wise.lastno || wiseList.get(-no) == null) {
                     System.out.println(no + "번 명언은 존재하지 않습니다.");
@@ -75,10 +84,8 @@ public class Main {
                     System.out.println(no + "번 명언이 삭제되었습니다.");
                 }
 
-            } else if (cmd.startsWith("수정")) {
-                //fixme: check
-                String query = cmd.substring(3);
-                int no = Integer.parseInt(query.substring(3));
+            } else if (cmd.startsWith("수정") && cmdQuery.length >= 2) {
+                int no = Integer.parseInt(queryMap.get("id"));
 
                 if (no > wise.lastno || wiseList.get(-no) == null) {
                     System.out.println(no + "번 명언은 존재하지 않습니다.");
