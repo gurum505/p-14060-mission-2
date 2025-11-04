@@ -18,6 +18,7 @@ gradle
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+test.txt
 
 ### Eclipse ###
 .apt_generated
